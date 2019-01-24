@@ -1,1 +1,4 @@
-MyData <- read.csv(file="c:/TheDataIWantToReadIn.csv", header=TRUE, sep=",")
+MyData <- read.csv(file="FIFA18 - Ultimate Team players.csv", header=TRUE, sep=",")
+agnkangkajng
+abamgnalkgq
+agknagkag
