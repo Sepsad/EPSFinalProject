@@ -1,18 +1,26 @@
-require(graphics)
+par(mfrow = c(2,2))
+for (i in c(1,5,10,15)){
+  
+  plot(dpois( x=0:200, lambda=i ), xlim=c(-2,20),freq = FALSE , type = "l" , col = "red")
+}
+  
+lambda <- 4
+num_of_samples <- c(5,10,500,5000)
+x <- c(1:500)
+par(mfrow=c(2,2))
 
--log(dpois(0:7, lambda = 1) * gamma(1+ 0:7)) # == 1
-Ni <- rpois(50, lambda = 4); table(factor(Ni, 0:max(Ni)))
+for(j in num_of_samples)
+{
+  for (i in 1:500){
+    x[i] <- mean(rpois(j,lambda))
+    
+  }
+  hist (x,freq=FALSE , 50)
+  xfit <- seq(min(x),max(x),length = 40)
+  yfit <- dnorm(xfit,mean(x),sd(x))
+  lines(xfit,yfit,col="blue")
+  print(j)
+}
 
-1 - ppois(10*(15:25), lambda = 100)  # becomes 0 (cancellation)
-ppois(10*(15:25), lambda = 100, lower.tail = FALSE)  # no cancellation
 
-par(mfrow = c(2, 1))
-x <- seq(-0.01, 5, 0.01)
-plot(x, ppois(x, 1), type = "s", ylab = "F(x)", main = "Poisson(1) CDF")
-plot(x, pbinom(x, 100, 0.01), type = "s", ylab = "F(x)",
-     main = "Binomial(100, 0.01) CDF")
 
-## The (limit) case  lambda = 0 :
-stopifnot(identical(dpois(0,0), 1),
-          identical(ppois(0,0), 1),
-          identical(qpois(1,0), 0))

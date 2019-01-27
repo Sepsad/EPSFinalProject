@@ -17,20 +17,22 @@ library(dplyr)
 
 MyData <- read.csv(file="C:/private shakhsi/Education/Coding/R/eps_proj/FIFA18 - Ultimate Team players.csv",header = TRUE , sep = ',' , stringsAsFactors = FALSE)
 
-pace = MyData$pace
-pace_without_NAs = pace
+NA_fraction <- function(List0){
+  NAs_index = which(List0 == "N/A")
+  fraction_of_NA = length(NAs_index)/length(List0) 
+  return(fraction_of_NA)
+}
 
-NAs_index = (pace == "N/A")
+  number_of_feature = length(MyData[1,])
+  feature_names = names(MyData)
 
-pace_without_NAs = as.numeric(pace_without_NAs)
-pace_without_NAs[NAs_index] = 0
-
-
-mean_pace = mean(pace_without_NAs)
-
-pace_without_NAs[NAs_index]=mean_pace
-
-summary(pace_without_NAs)
+for (i in c(1:number_of_feature))
+{
+  print("fraction on NAs")
+  print(feature_names[i])
+  print(NA_fraction(MyData[,i]))
+  
+}
 ```
 
 ## Qusetion 2
@@ -58,7 +60,7 @@ MyData <- read.csv(file="C:/private shakhsi/Education/Coding/R/eps_proj/FIFA18 -
 
 weight_fifa <- MyData$weight
 
-numb_of_samples = as.integer(readline(prompt = "enter number of samples : ") )
+numb_of_samples <- 100
 sample_weight <- sample(weight_fifa,numb_of_samples)
 
 scale_sample_weight <-scale(sample_weight) #for qqnorm
@@ -86,7 +88,7 @@ p_value_1 <- function(mu0 , mu1 , s , n )
 }
 mean_weight
 
-mu_for_test <- as.numeric(readline(prompt = "Enter mu for testing : "))
+mu_for_test <- 73
 
 p_value_1(mean_weight , mu_for_test , sd_weight , numb_of_samples) # yek tarafe
 
@@ -96,7 +98,86 @@ p_value_1(mean_weight , mu_for_test , sd_weight , numb_of_samples) # yek tarafe
 
 ##QUESTION 4
 
-```{r Question 4}
+```{r Question 4, warning=FALSE}
+
+MyData <- read.csv(file="C:/private shakhsi/Education/Coding/R/eps_proj/FIFA18 - Ultimate Team players.csv",header = TRUE , sep = ',' , stringsAsFactors = FALSE)
+source("C:/private shakhsi/Education/Coding/R/eps_proj/Q7.R")
+
+X=NA_corect(MyData$drib_dribbling)
+Y=NA_corect(MyData$pass_curve)
+par(mfrow = c(1,1))
+plot(x= scale(X) ,y= scale(Y) )
+linear_model <- lm(Y~X)
+abline(linear_model, col = "red")
+
+corel_pearson <- cor(X,Y , method = "pearson")
+ 
+corel_spearman <- cor(X, Y , method = "spearman")
+
+qqplot(X,Y)
+
+corel_pearson 
+
+corel_spearman
+
+
+```
+
+
+##QUESTION 5
+
+```{r QUESTION 5 , warning=FALSE}
+
+par(mfrow = c(2,2))
+for (i in c(1,5,10,15)){
+  
+  plot(dpois( x=0:200, lambda=i ), xlim=c(-2,20),freq = FALSE , type = "l" , col = "red")
+}
+  
+lambda <- 4
+num_of_samples <- c(5,10,500,5000)
+x <- c(1:50)
+par(mfrow=c(2,2))
+
+for(j in num_of_samples)
+{
+  for (i in 1:50){
+    x[i] <- mean(rpois(j,lambda))
+    
+  }
+  hist (x,freq=FALSE , main = "")
+  xfit <- seq(min(x),max(x),length = 40)
+  yfit <- dnorm(xfit,mean(x),sd(x))
+  lines(xfit,yfit,col="blue")
+  print(j)
+}
+
+```
+
+##QUESTION 6
+
+```{r QUESTION 6, warning=FALSE}
+
+
+
+MyData <- read.csv(file="C:/private shakhsi/Education/Coding/R/eps_proj/FIFA18 - Ultimate Team players.csv",header = TRUE , sep = ',' , stringsAsFactors = FALSE)
+source("C:/private shakhsi/Education/Coding/R/eps_proj/Q7.R")
+
+X=NA_corect(MyData$drib_ball_control)
+Y=NA_corect(MyData$drib_balance)
+
+X_sample = sample(X , 100 )
+Y_sample = sample(Y , 100 )
+
+
+q = lm(Y_sample ~ X_sample)
+
+
+par( mfrow = c(1,1) )
+plot(x= X_sample ,y= Y_sample )
+
+abline(q, col = "red")
+
 
 ```
 
